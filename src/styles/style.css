@@ -1,0 +1,150 @@
+*{
+	box-sizing: border-box;
+	color: red
+}
+
+.logo{
+	text-transform: uppercase;
+	font-family: 'Cinzel Decorative', cursive;
+}
+.logo-img{
+	width: 100px;
+
+}
+.logo-image{
+	width: 100px;
+}
+.container{
+	/* width: 70%;
+	margin: 0 auto; */
+	color: blue !important;
+}
+.header-container{
+	width:80%; 
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.cart-store img{
+	width: 100px;
+
+}
+.cart-store{
+	position: relative;
+}
+.amount{
+	position: absolute;
+	top:40%;
+	left:40%;
+	background-color: #fff;
+	width: 25px;
+	height: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+
+}
+.my-card{
+	display: flex;
+}
+.card-image{
+	height: 200px;
+}
+.box{
+	/* width: 100%; */
+}
+.search{
+	position: relative;
+}
+.close-search{
+	position: absolute;
+	right: 5px;
+	top: 2px;
+	border-radius: 5px;
+	border: none;
+}
+/* ////////////////////////////SIDEBAR */
+.filter{
+	display: flex;
+	flex-direction: column;
+	row-gap: 20px;
+}
+.checkbox input {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+	margin: 10px 0 0 20px;
+}
+.checkbox__text {
+	position: relative;
+	padding: 0 0 0 60px;
+	cursor: pointer;
+}
+.checkbox__text:before {
+	content: '';
+	position: absolute;
+	top: -4px;
+	left: 0;
+	width: 50px;
+	height: 26px;
+	border-radius: 13px;
+	background: #CDD1DA;
+	box-shadow: inset 0 2px 3px rgba(0,0,0,.2);
+	transition: .2s;
+}
+.checkbox__text:after {
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: 2px;
+	width: 22px;
+	height: 22px;
+	border-radius: 10px;
+	background: #FFF;
+	box-shadow: 0 2px 5px rgba(0,0,0,.3);
+	transition: .2s;
+}
+.checkbox input[value='blue']:checked + .checkbox__text:before {
+	background: #1b6eec;
+}
+.checkbox input[value='red']:checked + .checkbox__text:before {
+	background: #dd0e0e;
+}
+.checkbox input[value='black']:checked + .checkbox__text:before {
+	background: #080808;
+}
+.checkbox input[value='popular']:checked + .checkbox__text:before {
+	background: #0faa80;
+}
+.checkbox input:checked + .checkbox__text:after {
+	left: 26px;
+}
+.checkbox input:focus + .checkbox__text:before {
+	box-shadow: inset 0 2px 3px rgba(0,0,0,.2), 0 0 0 3px rgba(255,255,0,.7);
+}
+.side-bar{
+	border: 1px solid #000;
+	height: 70vh;
+}
+
+
+.manufacturer{
+	width: 65px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.manufacturer-img{
+	width: 50px;
+}
+.manufacturer.active{
+	border: 2px solid rgb(108, 38, 38);
+	border-radius:6px;
+}
+.my-card .title{
+	font-size: 1.5rem;
+
+}
