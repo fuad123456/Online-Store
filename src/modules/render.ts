@@ -1,6 +1,6 @@
 import {IData} from '../data/data'
 import {data} from '../data/data'
-import {filterArByColor} from '../modules/filter'
+import {filterColor} from '../modules/filter'
 
 
 

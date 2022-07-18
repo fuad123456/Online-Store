@@ -1,13 +1,13 @@
 import "./styles/style.css";
 import { IData } from "./data/data";
 import { data } from "./data/data";
-import { filterArByColor, filterArByPop, filterArByManufacturer } from "./modules/filter";
+import { filterColor, filterPop, filterManufacturer } from "./modules/filter";
 import { render } from "./modules/render";
 // console.log(data);
 //this email
 type IDataLauncher = {[key: string]: string|undefined}
 
-// console.log(filterArByPop(data,true));
+// console.log(filterPop(data,true));
 let dataNew: IData[] = data;
 
 var state: IData[] = [];
@@ -20,12 +20,12 @@ let checkbox = document.querySelectorAll(
 //   el.addEventListener("change", function () {
 //     if (el.value == "blue" || el.value == "black" || el.value == "red") {
 //       if (el.checked) {
-//         let d = filterArByColor(dataNew, el.value);
+//         let d = filterColor(dataNew, el.value);
 //         if (!localStorage.getItem("test") || state.length==0) {
 //           localStorage.setItem("test", JSON.stringify(d));
 //           state = [...d];
 //         } else {
-//           let d = filterArByColor(state, el.value);
+//           let d = filterColor(state, el.value);
 //           let r = JSON.parse(localStorage.getItem("test") as string);
 //           console.log(d);
 // 		  if (d.length!==0) {
@@ -46,12 +46,12 @@ let checkbox = document.querySelectorAll(
 //       }
 //     } else {
 //       if (el.checked) {
-//         let d = filterArByPop(state);
+//         let d = filterPop(state);
 //         if (!localStorage.getItem("test")) {
 //           localStorage.setItem("test", JSON.stringify(d));
 //           state = [...d];
 //         } else {
-//           let d = filterArByPop(state);
+//           let d = filterPop(state);
 //           let r = JSON.parse(localStorage.getItem("test") as string);
 //         //   console.log(r);
 //           state = [...r, ...d];
@@ -76,13 +76,13 @@ let manufacturer = document.querySelectorAll(".manufacturer-img") as NodeListOf<
 //       parent.classList.add("active");
 // 	  let attr:string=el.dataset.manufacturer!;
 //       if (!localStorage.getItem("test") || state.length==0) {
-// 		let d = filterArByManufacturer(dataNew, attr);
+// 		let d = filterManufacturer(dataNew, attr);
 // 		console.log(d);
 //         localStorage.setItem("test", JSON.stringify(d));
 //         state = [...d];
 //       }
 // 	  else {
-// 		let d = filterArByManufacturer(dataNew,attr);
+// 		let d = filterManufacturer(dataNew,attr);
 // 		let r = JSON.parse(localStorage.getItem("test") as string);
 // 		console.log(r);
 // 		state = [...r, ...d];
@@ -142,13 +142,15 @@ function analize() {
 	let manufactItems:IData[] = [];
 	let colorItems:IData[] = [];
 	let filterAfterManufact: IData[]=[]
+	let filterAfterColor:IData[]
 	let popularItems: IData[]=[]
 // analize()
 
 function launcher(data:IDataLauncher[]){
 	// state=[]
-	let isImgActive=false
-	let c=false
+	let isImgActive:boolean=false
+	let isColorsChecked:boolean=false
+	let isPopularChecked:boolean=false
 	allImages.forEach(function(eli){
 		let parent = eli.parentElement as HTMLElement;
 		if(parent.classList.contains('active')){
@@ -158,62 +160,80 @@ function launcher(data:IDataLauncher[]){
 	})
 	allInputsOfColor.forEach(function(eli){
 		if(eli.checked){
-			c=true
+			isColorsChecked=true
+		}
+	})
+	allInputsOfPopular.forEach(function(eli){
+		if(eli.checked){
+			isPopularChecked=true
 		}
 	})
 	colorItems=[]
 	manufactItems=[]
+	popularItems=[]
 	filterAfterManufact=[]
+	filterAfterColor=[]
 	if (data.length!==0){
 		data.map(function(eli){
 			if(eli.manufacturer){
-				let elManufact=filterArByManufacturer(dataNew,eli.manufacturer)
+				let elManufact=filterManufacturer(dataNew,eli.manufacturer)
 				manufactItems=[...manufactItems,...elManufact]
-				console.log(isImgActive);
 				state=manufactItems
 			}
 			if(eli.color){
 				if(manufactItems.length==0){
-					let elColor=filterArByColor(dataNew,eli.color)
+					let elColor=filterColor(dataNew,eli.color)
 					colorItems=[...colorItems,...elColor]
 				}else{
 					if(isImgActive){
-						let elColor=filterArByColor(manufactItems,eli.color)
+						let elColor=filterColor(manufactItems,eli.color)
 						filterAfterManufact=[...filterAfterManufact,...elColor]
-						console.log(isImgActive);
 					}
 				}
 
 			}
 			if(eli.popular){
-				if(manufactItems.length==0){
-					let elPop=filterArByPop(dataNew)
+				if(manufactItems.length==0 && colorItems.length==0){
+					let elPop=filterPop(dataNew)
 					popularItems=[...popularItems,...elPop]
 				}else{
-					if(isImgActive){
-						let elPop=filterArByPop(manufactItems)
+					if(isImgActive && !isColorsChecked){
+						let elPop=filterPop(manufactItems)
 						filterAfterManufact=[...filterAfterManufact,...elPop]
-						console.log(isImgActive);
+					}
+					if(isColorsChecked && isImgActive===false){
+						let elPop=filterPop(colorItems)
+						filterAfterColor=[...filterAfterColor,...elPop]
 					}
 				}
 
 			}
-			console.log(isImgActive);
-			// console.log(main);
 		})
-		if(manufactItems.length==0 && colorItems.length !==0){
+		if(manufactItems.length==0 && colorItems.length !==0 && isPopularChecked===false){
 			state=colorItems
-			console.log('m',colorItems);
+			console.log('colorItems',colorItems);
 		}
-		else if(manufactItems.length!=0 && c==false){
+		else if(manufactItems.length!=0 && isColorsChecked==false && isPopularChecked==false){
 			state=manufactItems
-			console.log('f',manufactItems);
+			console.log('manufactItems',manufactItems);
 		}
 		else if(manufactItems.length!=0 && isImgActive!==false){
 			state=filterAfterManufact
 			// console.log('f',f);
-			console.log(filterAfterManufact.length);
-			console.log(colorItems.length);
+			console.log(filterAfterManufact.length,'filterAfterManufact.length');
+			console.log(colorItems.length,'colorItems.length');
+		}
+		else if(manufactItems.length==0 && colorItems.length==0){
+			state=popularItems
+			console.log('popularItems.length',popularItems.length);
+		}
+		else if(manufactItems.length!==0 && isPopularChecked!==false && isColorsChecked==false){
+			state=filterAfterManufact
+			console.log(isPopularChecked);
+		}
+		else if(manufactItems.length==0 && isPopularChecked!==false && isColorsChecked!==false){
+			state=filterAfterColor
+			console.log(isPopularChecked);
 		}
 		console.log(data);
 		
